@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render 
+from django.db.models import Q
 
 # Create your views here.
 from app.models import *
@@ -79,4 +80,48 @@ def selfjoins(request):
    
 
     d={'empmgrobjects':empmgrobjects}
-    return render(request,'selfjoins.html',d)
+    return render(request,'selfjoins.html',d) 
+
+
+
+
+def emp_mgr_dept(request): 
+    emd=Emp.objects.select_related('deptno','mgr').all()  
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__dname='RESEARCH') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__dname='SALES') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__dlocation='DALLAS') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__ename='BLAKE') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__ename='KING') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(hiredate__year=2024) 
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='BLAKE') 
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='MARTIN')  
+    emd=Emp.objects.select_related('deptno','mgr').all()  
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(deptno__dname='RESEARCH')|Q( mgr__ename='JOHNS')) 
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__deptno=20)   
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(deptno__dlocation='DALLAS') |Q(mgr__ename='JOHNS') ) 
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__deptno=20)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__deptno=20)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__hiredate__year=2024)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__hiredate__year=2024,sal__gt=2000)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__hiredate__year=2024,sal__lt=3000)   
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__comm__isnull=True)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__comm__isnull=False)  
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__isnull=True)   
+    emd=Emp.objects.select_related('deptno','mgr').filter(Q(mgr__hiredate__year=2024) |Q(deptno__dname='SALES') ) 
+    emd=Emp.objects.select_related('deptno','mgr').all()  
+    emd=Emp.objects.select_related('deptno','mgr').filter(ename='SMITH')  
+    emd=Emp.objects.select_related('deptno','mgr').filter(mgr__hiredate__year=2024)   
+    emd=Emp.objects.select_related('deptno','mgr').filter(deptno__deptno=30) 
+    
+
+
+    
+    
+    
+      
+
+
+
+    d={'emd':emd}
+
+    return render(request,'emp_mgr_dept.html',d)
